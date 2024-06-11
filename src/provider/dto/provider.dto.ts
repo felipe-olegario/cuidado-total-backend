@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const CreateServiceProviderDto = z.object({
+export const CreateProviderDto = z.object({
   name: z.string(),
   email: z.string().email(),
   phone: z.string(),
