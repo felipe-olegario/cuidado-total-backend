@@ -6,3 +6,85 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model ServiceProvider {
+  id           String        @id @default(uuid())
+  name         String
+  email        String        @unique
+  phone        String
+  street       String
+  number       String
+  postalCode   String
+  document     String        @db.VarChar(14)
+  services     Service[]     @relation("ServiceProviderServices")
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  appointments Appointment[]
+  evaluations  Evaluation[]
+
+  @@map("service_providers")
+}
+
+model Service {
+  id                String          @id @default(uuid())
+  name              String
+  description       String
+  price             Float
+  duration          Int // duration in minutes
+  serviceProviderId String
+  serviceProvider   ServiceProvider @relation("ServiceProviderServices", fields: [serviceProviderId], references: [id])
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  appointments      Appointment[]
+  evaluations       Evaluation[]
+
+  @@map("services")
+}
+
+model Contractor {
+  id           String        @id @default(uuid())
+  name         String
+  email        String        @unique
+  phone        String
+  street       String
+  number       String
+  postalCode   String
+  document     String        @db.VarChar(11)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  appointments Appointment[]
+  evaluations  Evaluation[]
+
+  @@map("contractors")
+}
+
+model Appointment {
+  id                String          @id @default(uuid())
+  serviceProviderId String
+  contractorId      String
+  serviceId         String
+  scheduledDate     DateTime
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  serviceProvider   ServiceProvider @relation(fields: [serviceProviderId], references: [id])
+  contractor        Contractor      @relation(fields: [contractorId], references: [id])
+  service           Service         @relation(fields: [serviceId], references: [id])
+
+  @@map("appointments")
+}
+
+model Evaluation {
+  id                String          @id @default(uuid())
+  serviceProviderId String
+  contractorId      String
+  serviceId         String
+  rating            Int
+  comment           String?
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  serviceProvider   ServiceProvider @relation(fields: [serviceProviderId], references: [id])
+  contractor        Contractor      @relation(fields: [contractorId], references: [id])
+  service           Service         @relation(fields: [serviceId], references: [id])
+
+  @@map("evaluations")
+}
