@@ -1,6 +1,5 @@
-# 🌊 Backend para App Limpeza de Casa🌊
+# 🏠 Backend para App Limpeza de Casa 🧹
 
-Lorem ipsum
 
 ## 🛠 Tecnologias Utilizadas
 
