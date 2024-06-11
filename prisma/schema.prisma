@@ -19,7 +19,7 @@ model ServiceProvider {
   services     Service[]     @relation("ServiceProviderServices")
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
-  appointments Appointment[]
+  scheduling Scheduling[]
   evaluations  Evaluation[]
 
   @@map("service_providers")
@@ -35,7 +35,7 @@ model Service {
   serviceProvider   ServiceProvider @relation("ServiceProviderServices", fields: [serviceProviderId], references: [id])
   createdAt         DateTime        @default(now())
   updatedAt         DateTime        @updatedAt
-  appointments      Appointment[]
+  scheduling      Scheduling[]
   evaluations       Evaluation[]
 
   @@map("services")
@@ -52,13 +52,13 @@ model Contractor {
   document     String        @db.VarChar(11)
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
-  appointments Appointment[]
+  scheduling Scheduling[]
   evaluations  Evaluation[]
 
   @@map("contractors")
 }
 
-model Appointment {
+model Scheduling {
   id                String          @id @default(uuid())
   serviceProviderId String
   contractorId      String
@@ -70,7 +70,7 @@ model Appointment {
   contractor        Contractor      @relation(fields: [contractorId], references: [id])
   service           Service         @relation(fields: [serviceId], references: [id])
 
-  @@map("appointments")
+  @@map("scheduling")
 }
 
 model Evaluation {
