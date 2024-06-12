@@ -15,8 +15,6 @@ async function bootstrap() {
     fastifyAdapter,
   );
 
-  app.useGlobalPipes(new ValidationPipe());
-
   const config = new DocumentBuilder()
     .setTitle('Cuidado Total')
     .setDescription('...')
@@ -29,6 +27,8 @@ async function bootstrap() {
   const HOST = process.env.HOST || '127.0.0.1';
   const PORT = Number(process.env.PORT) || 3000;
   app.enableCors({ origin: [/^(.*)/] });
+
+  app.useGlobalPipes(new ValidationPipe());
 
   await app.listen(PORT, HOST, () => {
     console.log(`Listening on: ${HOST}:${PORT}`);

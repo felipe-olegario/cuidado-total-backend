@@ -1,6 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateProviderDtoType } from './dto/provider.dto';
+import { CreateProviderDto } from './dto/provider.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 
@@ -11,7 +11,7 @@ export class ProviderService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async create(createProviderDto: CreateProviderDtoType) {
+  async create(createProviderDto: CreateProviderDto) {
     const { name, email, phone, street, number, postalCode, document, password } = createProviderDto;
     const hashedPassword = await bcrypt.hash(password, 10);
     return this.prisma.serviceProvider.create({
@@ -40,7 +40,7 @@ export class ProviderService {
     });
   }
 
-  async update(id: string, updateProviderDto: CreateProviderDtoType) {
+  async update(id: string, updateProviderDto: CreateProviderDto) {
     const { name, email, phone, street, number, postalCode, document } = updateProviderDto;
     return this.prisma.serviceProvider.update({
       where: {

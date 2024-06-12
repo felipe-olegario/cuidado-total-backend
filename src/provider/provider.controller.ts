@@ -1,13 +1,13 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { ProviderService } from './provider.service';
-import { CreateProviderDtoType, LoginDtoType } from './dto/provider.dto';
+import { CreateProviderDto, LoginDto } from './dto/provider.dto';
 
 @Controller('provider')
 export class ProviderController {
   constructor(private readonly providerService: ProviderService) {}
 
   @Post()
-  create(@Body() createProviderDto: CreateProviderDtoType) {
+  create(@Body() createProviderDto: CreateProviderDto) {
     return this.providerService.create(createProviderDto);
   }
 
@@ -22,7 +22,7 @@ export class ProviderController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProviderDto: CreateProviderDtoType) {
+  update(@Param('id') id: string, @Body() updateProviderDto: CreateProviderDto) {
     return this.providerService.update(id, updateProviderDto);
   }
 
@@ -32,7 +32,7 @@ export class ProviderController {
   }
 
   @Post('login')
-  async login(@Body() loginDto: LoginDtoType) {
+  async login(@Body() loginDto: LoginDto) {
     return this.providerService.login(loginDto.email, loginDto.password);
   }
 }

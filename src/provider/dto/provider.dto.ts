@@ -1,54 +1,45 @@
-import { z } from 'zod';
+import { IsString, IsEmail, IsNotEmpty } from 'class-validator';
 
-export const CreateProviderDto = z.object({
-  name: z.string(),
-  email: z.string().email(),
-  phone: z.string(),
-  street: z.string(),
-  number: z.string(),
-  password: z.string(),
-  postalCode: z.string(),
-  document: z.string(),
-});
+export class CreateProviderDto {
+  @IsString()
+  @IsNotEmpty()
+  name: string;
 
-export const LoginDto = z.object({
-  email: z.string().email(),
-  password: z.string(),
-});
+  @IsEmail()
+  @IsNotEmpty()
+  email: string;
 
-export const CreateServiceDto = z.object({
-  name: z.string(),
-  description: z.string(),
-  price: z.number(),
-  duration: z.number(),
-  serviceProviderId: z.string(),
-});
+  @IsString()
+  @IsNotEmpty()
+  phone: string;
 
-export const CreateContractorDto = z.object({
-  name: z.string(),
-  email: z.string().email(),
-  phone: z.string(),
-  street: z.string(),
-  number: z.string(),
-  postalCode: z.string(),
-  document: z.string(),
-});
+  @IsString()
+  @IsNotEmpty()
+  street: string;
 
-export const CreateSchedulingDto = z.object({
-  serviceProviderId: z.string(),
-  contractorId: z.string(),
-  serviceId: z.string(),
-  scheduledDate: z.date(),
-});
+  @IsString()
+  @IsNotEmpty()
+  number: string;
 
-export const CreateEvaluationDto = z.object({
-  serviceProviderId: z.string(),
-  contractorId: z.string(),
-  serviceId: z.string(),
-  rating: z.number().int().min(1).max(5),
-  comment: z.string().optional(),
-});
+  @IsString()
+  @IsNotEmpty()
+  password: string;
 
+  @IsString()
+  @IsNotEmpty()
+  postalCode: string;
 
-export type CreateProviderDtoType = z.infer<typeof CreateProviderDto>;
-export type LoginDtoType = z.infer<typeof LoginDto>;
+  @IsString()
+  @IsNotEmpty()
+  document: string;
+}
+
+export class LoginDto {
+  @IsEmail()
+  @IsNotEmpty()
+  email: string;
+
+  @IsString()
+  @IsNotEmpty()
+  password: string;
+}
