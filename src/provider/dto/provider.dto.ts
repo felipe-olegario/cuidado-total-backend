@@ -6,8 +6,14 @@ export const CreateProviderDto = z.object({
   phone: z.string(),
   street: z.string(),
   number: z.string(),
+  password: z.string(),
   postalCode: z.string(),
   document: z.string(),
+});
+
+export const LoginDto = z.object({
+  email: z.string().email(),
+  password: z.string(),
 });
 
 export const CreateServiceDto = z.object({
@@ -42,3 +48,7 @@ export const CreateEvaluationDto = z.object({
   rating: z.number().int().min(1).max(5),
   comment: z.string().optional(),
 });
+
+
+export type CreateProviderDtoType = z.infer<typeof CreateProviderDto>;
+export type LoginDtoType = z.infer<typeof LoginDto>;

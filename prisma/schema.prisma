@@ -8,19 +8,20 @@ datasource db {
 }
 
 model ServiceProvider {
-  id           String        @id @default(uuid())
-  name         String
-  email        String        @unique
-  phone        String
-  street       String
-  number       String
-  postalCode   String
-  document     String        @db.VarChar(14)
-  services     Service[]     @relation("ServiceProviderServices")
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  scheduling Scheduling[]
-  evaluations  Evaluation[]
+  id          String       @id @default(uuid())
+  name        String
+  email       String       @unique
+  phone       String
+  street      String
+  number      String
+  postalCode  String
+  password    String
+  document    String       @db.VarChar(14) @unique
+  services    Service[]    @relation("ServiceProviderServices")
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  scheduling  Scheduling[]
+  evaluations Evaluation[]
 
   @@map("service_providers")
 }
@@ -35,25 +36,26 @@ model Service {
   serviceProvider   ServiceProvider @relation("ServiceProviderServices", fields: [serviceProviderId], references: [id])
   createdAt         DateTime        @default(now())
   updatedAt         DateTime        @updatedAt
-  scheduling      Scheduling[]
+  scheduling        Scheduling[]
   evaluations       Evaluation[]
 
   @@map("services")
 }
 
 model Contractor {
-  id           String        @id @default(uuid())
-  name         String
-  email        String        @unique
-  phone        String
-  street       String
-  number       String
-  postalCode   String
-  document     String        @db.VarChar(11)
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  scheduling Scheduling[]
-  evaluations  Evaluation[]
+  id          String       @id @default(uuid())
+  name        String
+  email       String       @unique
+  phone       String
+  street      String
+  number      String
+  password    String
+  postalCode  String
+  document    String       @db.VarChar(11) @unique
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  scheduling  Scheduling[]
+  evaluations Evaluation[]
 
   @@map("contractors")
 }

@@ -5,6 +5,7 @@ export interface ServiceProvider {
     phone: string;
     street: string;
     number: string;
+    password: string;
     postalCode: string;
     document: string;
     services: Service[];

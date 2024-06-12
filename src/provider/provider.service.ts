@@ -1,13 +1,19 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { ServiceProvider } from './entities/provider.entity';
+import { CreateProviderDtoType } from './dto/provider.dto';
+import * as bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class ProviderService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly jwtService: JwtService,
+  ) {}
 
-  async create(createProviderDto: ServiceProvider) {
-    const { name, email, phone, street, number, postalCode, document } = createProviderDto;
+  async create(createProviderDto: CreateProviderDtoType) {
+    const { name, email, phone, street, number, postalCode, document, password } = createProviderDto;
+    const hashedPassword = await bcrypt.hash(password, 10);
     return this.prisma.serviceProvider.create({
       data: {
         name,
@@ -17,6 +23,7 @@ export class ProviderService {
         number,
         postalCode,
         document,
+        password: hashedPassword,
       },
     });
   }
@@ -33,7 +40,7 @@ export class ProviderService {
     });
   }
 
-  async update(id: string, updateProviderDto: ServiceProvider) {
+  async update(id: string, updateProviderDto: CreateProviderDtoType) {
     const { name, email, phone, street, number, postalCode, document } = updateProviderDto;
     return this.prisma.serviceProvider.update({
       where: {
@@ -57,5 +64,20 @@ export class ProviderService {
         id,
       },
     });
+  }
+
+  async login(email: string, password: string) {
+    const provider = await this.prisma.serviceProvider.findUnique({ where: { email } });
+    if (!provider) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+    const passwordValid = await bcrypt.compare(password, provider.password);
+    if (!passwordValid) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+    const payload = { email: provider.email, sub: provider.id };
+    return {
+      access_token: this.jwtService.sign(payload),
+    };
   }
 }
