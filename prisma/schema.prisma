@@ -7,7 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model ServiceProvider {
+model Provider {
   id          String       @id @default(uuid())
   name        String
   email       String       @unique
@@ -16,7 +16,7 @@ model ServiceProvider {
   number      String
   postalCode  String
   password    String
-  document    String       @db.VarChar(14) @unique
+  document    String       @unique @db.VarChar(14)
   services    Service[]    @relation("ServiceProviderServices")
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
@@ -27,15 +27,18 @@ model ServiceProvider {
 }
 
 model Service {
-  id                String          @id @default(uuid())
+  id                String       @id @default(uuid())
   name              String
   description       String
   price             Float
   duration          Int // duration in minutes
   serviceProviderId String
-  serviceProvider   ServiceProvider @relation("ServiceProviderServices", fields: [serviceProviderId], references: [id])
-  createdAt         DateTime        @default(now())
-  updatedAt         DateTime        @updatedAt
+  valueMeter        Float
+  valueHour         Float
+  valueConvenient   Float
+  serviceProvider   Provider     @relation("ServiceProviderServices", fields: [serviceProviderId], references: [id])
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
   scheduling        Scheduling[]
   evaluations       Evaluation[]
 
@@ -51,7 +54,7 @@ model Contractor {
   number      String
   password    String
   postalCode  String
-  document    String       @db.VarChar(11) @unique
+  document    String       @unique @db.VarChar(11)
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
   scheduling  Scheduling[]
@@ -61,32 +64,32 @@ model Contractor {
 }
 
 model Scheduling {
-  id                String          @id @default(uuid())
+  id                String     @id @default(uuid())
   serviceProviderId String
   contractorId      String
   serviceId         String
   scheduledDate     DateTime
-  createdAt         DateTime        @default(now())
-  updatedAt         DateTime        @updatedAt
-  serviceProvider   ServiceProvider @relation(fields: [serviceProviderId], references: [id])
-  contractor        Contractor      @relation(fields: [contractorId], references: [id])
-  service           Service         @relation(fields: [serviceId], references: [id])
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+  serviceProvider   Provider   @relation(fields: [serviceProviderId], references: [id])
+  contractor        Contractor @relation(fields: [contractorId], references: [id])
+  service           Service    @relation(fields: [serviceId], references: [id])
 
   @@map("scheduling")
 }
 
 model Evaluation {
-  id                String          @id @default(uuid())
+  id                String     @id @default(uuid())
   serviceProviderId String
   contractorId      String
   serviceId         String
   rating            Int
   comment           String?
-  createdAt         DateTime        @default(now())
-  updatedAt         DateTime        @updatedAt
-  serviceProvider   ServiceProvider @relation(fields: [serviceProviderId], references: [id])
-  contractor        Contractor      @relation(fields: [contractorId], references: [id])
-  service           Service         @relation(fields: [serviceId], references: [id])
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+  serviceProvider   Provider   @relation(fields: [serviceProviderId], references: [id])
+  contractor        Contractor @relation(fields: [contractorId], references: [id])
+  service           Service    @relation(fields: [serviceId], references: [id])
 
   @@map("evaluations")
 }

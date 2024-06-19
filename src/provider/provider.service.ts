@@ -14,7 +14,7 @@ export class ProviderService {
   async create(createProviderDto: CreateProviderDto) {
     const { name, email, phone, street, number, postalCode, document, password } = createProviderDto;
     const hashedPassword = await bcrypt.hash(password, 10);
-    return this.prisma.serviceProvider.create({
+    return this.prisma.provider.create({
       data: {
         name,
         email,
@@ -29,11 +29,11 @@ export class ProviderService {
   }
 
   async findAll() {
-    return this.prisma.serviceProvider.findMany();
+    return this.prisma.provider.findMany();
   }
 
   async findOne(id: string) {
-    return this.prisma.serviceProvider.findUnique({
+    return this.prisma.provider.findUnique({
       where: {
         id,
       },
@@ -42,7 +42,7 @@ export class ProviderService {
 
   async update(id: string, updateProviderDto: CreateProviderDto) {
     const { name, email, phone, street, number, postalCode, document } = updateProviderDto;
-    return this.prisma.serviceProvider.update({
+    return this.prisma.provider.update({
       where: {
         id,
       },
@@ -59,7 +59,7 @@ export class ProviderService {
   }
 
   async remove(id: string) {
-    return this.prisma.serviceProvider.delete({
+    return this.prisma.provider.delete({
       where: {
         id,
       },
@@ -67,7 +67,7 @@ export class ProviderService {
   }
 
   async login(email: string, password: string) {
-    const provider = await this.prisma.serviceProvider.findUnique({ where: { email } });
+    const provider = await this.prisma.provider.findUnique({ where: { email } });
     if (!provider) {
       throw new UnauthorizedException('Invalid credentials');
     }
