@@ -1,10 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { ServiceProviderService } from './service-provider.service';
 import { CreateServiceProviderDto } from './dto/service-provider.dto';
+import { ServiceResponse } from './entities/service-provider.entity';
 
 @Controller('service-provider')
 export class ServiceProviderController {
-  constructor(private readonly serviceProviderService: ServiceProviderService) {}
+  constructor(
+    private readonly serviceProviderService: ServiceProviderService,
+  ) {}
 
   @Post()
   create(@Body() createServiceProviderDto: CreateServiceProviderDto) {
@@ -12,8 +15,12 @@ export class ServiceProviderController {
   }
 
   @Get()
-  findAll() {
-    return this.serviceProviderService.findAll();
+  async findAll(
+    @Query('page') page: string,
+    @Query('limit') limit: string,
+    @Query('orderBy') orderBy: string = 'createdAt',
+  ): Promise<ServiceResponse[]> {
+    return this.serviceProviderService.findAll(parseInt(page), parseInt(limit), orderBy);
   }
 
   @Get(':id')
