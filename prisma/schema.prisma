@@ -22,6 +22,7 @@ model Provider {
   updatedAt   DateTime     @updatedAt
   scheduling  Scheduling[]
   evaluations Evaluation[]
+  availabilities Availability[] @relation("ProviderAvailabilities")
 
   @@map("service_providers")
 }
@@ -92,4 +93,17 @@ model Evaluation {
   service           Service    @relation(fields: [serviceId], references: [id])
 
   @@map("evaluations")
+}
+
+model Availability {
+  id                String     @id @default(uuid())
+  providerId        String
+  date              DateTime
+  startTime         DateTime
+  endTime           DateTime
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+  provider          Provider   @relation("ProviderAvailabilities", fields: [providerId], references: [id])
+
+  @@map("availabilities")
 }
