@@ -70,6 +70,8 @@ model Scheduling {
   contractorId      String
   serviceId         String
   scheduledDate     DateTime
+  startTime         DateTime
+  endTime           DateTime
   createdAt         DateTime   @default(now())
   updatedAt         DateTime   @updatedAt
   serviceProvider   Provider   @relation(fields: [serviceProviderId], references: [id])
@@ -78,6 +80,7 @@ model Scheduling {
 
   @@map("scheduling")
 }
+
 
 model Evaluation {
   id                String     @id @default(uuid())
