@@ -8,23 +8,34 @@ datasource db {
 }
 
 model Provider {
-  id          String       @id @default(uuid())
-  name        String
-  email       String       @unique
-  phone       String
-  street      String
-  number      String
-  postalCode  String
-  password    String
-  document    String       @unique @db.VarChar(14)
-  services    Service[]    @relation("ServiceProviderServices")
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  scheduling  Scheduling[]
-  evaluations Evaluation[]
+  id             String         @id @default(uuid())
+  name           String
+  email          String         @unique
+  phone          String
+  password       String
+  document       String         @unique @db.VarChar(14)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  services       Service[]      @relation("ServiceProviderServices")
+  scheduling     Scheduling[]
+  evaluations    Evaluation[]
   availabilities Availability[] @relation("ProviderAvailabilities")
+  addresses      Address[]
 
   @@map("service_providers")
+}
+
+model Address {
+  id         String   @id @default(uuid())
+  street     String
+  number     Int
+  postalCode String
+  providerId String
+  latitude   Int
+  logintude  Int
+  provider   Provider @relation(fields: [providerId], references: [id], onDelete: Cascade)
+
+  @@map("addresses")
 }
 
 model Service {
@@ -81,7 +92,6 @@ model Scheduling {
   @@map("scheduling")
 }
 
-
 model Evaluation {
   id                String     @id @default(uuid())
   serviceProviderId String
@@ -99,14 +109,14 @@ model Evaluation {
 }
 
 model Availability {
-  id                String     @id @default(uuid())
-  providerId        String
-  date              DateTime
-  startTime         DateTime
-  endTime           DateTime
-  createdAt         DateTime   @default(now())
-  updatedAt         DateTime   @updatedAt
-  provider          Provider   @relation("ProviderAvailabilities", fields: [providerId], references: [id])
+  id         String   @id @default(uuid())
+  providerId String
+  date       DateTime
+  startTime  DateTime
+  endTime    DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  provider   Provider @relation("ProviderAvailabilities", fields: [providerId], references: [id])
 
   @@map("availabilities")
 }

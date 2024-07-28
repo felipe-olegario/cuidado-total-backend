@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsEmail, IsNotEmpty } from 'class-validator';
+import { IsString, IsEmail, IsNotEmpty, isInt } from 'class-validator';
 
 export class CreateProviderDto {
   @IsString()
@@ -17,20 +17,29 @@ export class CreateProviderDto {
   @IsNotEmpty()
   phone: string;
 
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  street: string;
-
-  @IsString()
-  @ApiProperty()
-  @IsNotEmpty()
-  number: string;
-
   @IsString()
   @ApiProperty()
   @IsNotEmpty()
   password: string;
+
+  @IsString()
+  @ApiProperty()
+  @IsNotEmpty()
+  document: string;
+
+  addresses: CreateAddressDto[];
+}
+
+export class CreateAddressDto {
+  @IsString()
+  @ApiProperty()
+  @IsNotEmpty()
+
+  street: string;
+  @IsString()
+  @ApiProperty()
+  @IsNotEmpty()
+  number: string;
 
   @IsString()
   @ApiProperty()
@@ -40,7 +49,12 @@ export class CreateProviderDto {
   @IsString()
   @ApiProperty()
   @IsNotEmpty()
-  document: string;
+  latitude: string;
+
+  @IsString()
+  @ApiProperty()
+  @IsNotEmpty()
+  logitude: string;
 }
 
 export class LoginDto {
@@ -53,4 +67,22 @@ export class LoginDto {
   @ApiProperty()
   @IsNotEmpty()
   password: string;
+}
+
+export class GetProvidersDto {
+  @IsNotEmpty()
+  @ApiProperty()
+  latitude?: number;
+  @IsNotEmpty()
+  @ApiProperty()
+  longitude?: number;
+  @IsNotEmpty()
+  @ApiProperty()
+  address?: string;
+  @IsNotEmpty()
+  @ApiProperty()
+  page?: number;
+  @IsNotEmpty()
+  @ApiProperty()
+  limit?: number;
 }

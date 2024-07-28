@@ -1,6 +1,6 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { ProviderService } from './provider.service';
-import { CreateProviderDto, LoginDto } from './dto/provider.dto';
+import { CreateProviderDto, GetProvidersDto, LoginDto } from './dto/provider.dto';
 
 @Controller('provider')
 export class ProviderController {
@@ -12,8 +12,8 @@ export class ProviderController {
   }
 
   @Get()
-  findAll() {
-    return this.providerService.findAll();
+  findAll(@Query() getProvidersDto: GetProvidersDto) {
+    return this.providerService.findAll(getProvidersDto);
   }
 
   @Get(':id')
